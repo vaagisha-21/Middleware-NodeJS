@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken")
 const User = require("../models/userModel")
 
 const registerUser = asyncHandler( async (req, res) => {
-    const { username, email, password } = req.body
+    const { username, email, password, roles } = req.body
     if(!username || !email || !password){
         res.status(400)
         throw new Error("All fields are mandatory")
@@ -21,14 +21,15 @@ const registerUser = asyncHandler( async (req, res) => {
     const user = await User.create({
         username,
         email,
-        password: hashedPassword
+        password: hashedPassword,
+        roles
     })
     console.log(`User created ${user}`)
     if(user){
-        res.status(201).json({ _id: user._id, email: user.email })
+        res.status(201).json({ _id: user._id, email: user.email, roles: user.roles })
     }
     else{
-        res.status(400)
+        res.status(400);
         throw new Error("User data is not valid")
     }
 })
@@ -46,7 +47,8 @@ const loginUser = asyncHandler( async (req, res) => {
             user:{
                 username: user.username,
                 email: user.email,
-                id: user.id
+                id: user.id,
+                roles: user.roles
             }
         }, 
         process.env.ACCESS_TOKEN_SECRET,

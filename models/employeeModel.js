@@ -1,6 +1,6 @@
 const mongoose = require("mongoose")
 
-const contactSchema = mongoose.Schema({
+const employeeSchema = mongoose.Schema({
     user_id: {
         type: mongoose.Schema.ObjectId,
         required: true,
@@ -8,11 +8,11 @@ const contactSchema = mongoose.Schema({
     },
     name: {
         type: String,
-        required:[true, "Please add the contact name"]
+        required:[true, "Please add the employee name"]
     },
     email: {
         type: String,
-        required:[true, "Please add the email name"]
+        required:[true, "Please add the email address"]
     },
     phone: {
         type: String,
@@ -22,4 +22,4 @@ const contactSchema = mongoose.Schema({
     timestamps: [true]
 });
 
-module.exports = mongoose.model("Contact", contactSchema);
+module.exports = mongoose.model("employee", employeeSchema);
