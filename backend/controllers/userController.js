@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const User = require("../models/userModel")
+const Product = require("../models/productModel")
 
 const registerUser = asyncHandler( async (req, res) => {
     const { username, email, password, roles } = req.body
@@ -26,7 +27,17 @@ const registerUser = asyncHandler( async (req, res) => {
     })
     console.log(`User created ${user}`)
     if(user){
-        res.status(201).json({ _id: user._id, email: user.email, roles: user.roles })
+        const accessToken = jwt.sign({
+            user:{
+                username: user.username,
+                email: user.email,
+                id: user.id,
+                roles: user.roles
+            }
+        }, 
+        process.env.ACCESS_TOKEN_SECRET,
+        {expiresIn: "1d"})
+        res.status(201).json({ _id: user._id, email: user.email, roles: user.roles, access_token: accessToken })
     }
     else{
         res.status(400);
@@ -52,8 +63,8 @@ const loginUser = asyncHandler( async (req, res) => {
             }
         }, 
         process.env.ACCESS_TOKEN_SECRET,
-        {expiresIn: "30m"})
-        res.status(200).json(({ accessToken }))
+        {expiresIn: "1d"})
+        res.status(200).json(({ accessToken, roles: user.roles[0] }))
     }
     else{
         res.status(401)
