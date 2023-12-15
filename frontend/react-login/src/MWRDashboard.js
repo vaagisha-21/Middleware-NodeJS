@@ -21,7 +21,8 @@ export const MWRDashboard = () => {
         );
         setMwrDataList(response.data);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        // console.error("Error fetching data:", error);
+        return error
       }
     };
 
@@ -31,7 +32,6 @@ export const MWRDashboard = () => {
   return (
     <div>
       <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        {/* <a class="navbar-brand" href="#">Navbar</a> */}
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -43,18 +43,16 @@ export const MWRDashboard = () => {
             <li class="nav-item">
               <a class="nav-link" href="#">Features</a>
             </li>
-            { roles === "admin" && 
-              <li class="nav-item">
-                <button class="nav-link" onClick={() => navigate("/userRoles")}>Role Management</button>
-              </li>
-            }
           </ul>
         </div>
-        <div class="w-50"><h4 className="text-start text-secondary">{roles.toUpperCase()} PANEL</h4></div>
+        <div class="w-50"><h4 className="text-center text-secondary">{roles.toUpperCase()} PANEL</h4></div>
         { roles === "admin" && 
+          <div>
+            <button className="btn btn-light" onClick={() => navigate("/userRoles")}>Role Management</button>
             <Popup trigger={<button className="btn btn-light"> Add Data</button>} position="bottom center">
               <div style={{color: "orange"}}>Data Added !!</div>
             </Popup>     
+          </div>
         }
         <button className="btn btn-light float-end" onClick={()=>navigate("/")}>Log Out</button>
       </nav>

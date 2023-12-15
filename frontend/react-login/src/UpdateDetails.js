@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { SnackbarProvider, closeSnackbar, enqueueSnackbar } from 'notistack';
+import { closeSnackbar, enqueueSnackbar } from 'notistack';
 
 const action = snackbarId => (
   <button className="btn btn-link text-decoration-none text-white" onClick={()=>{closeSnackbar(snackbarId); window.location.reload() }}>X</button>
@@ -10,7 +10,6 @@ export const UpdateDetails = (data) => {
   const notify = (e) => {
     e.preventDefault();
     setFlag(true);
-    console.log("notify")
     enqueueSnackbar('Details Updated!',  {
       variant: "success", action: action })
   }
@@ -29,7 +28,8 @@ export const UpdateDetails = (data) => {
                   config
                 ): null;        
             } catch (error) {
-                console.error("Error fetching data:", error);
+                // console.error("Error fetching data:", error);
+                return error;
             } 
         };
     
@@ -43,7 +43,6 @@ export const UpdateDetails = (data) => {
       };
     
       return (
-        // <SnackbarProvider >
           <form className="p-2">
             {Object.keys(data).filter(key => key !== "id").map( key => 
               <div className="w-100 p-1">
@@ -51,10 +50,7 @@ export const UpdateDetails = (data) => {
                   <input value={values[key]['value']} className="w-75" onChange={set(key)}/>
               </div>)
             }
-            {/* <SnackbarProvider
-            /> */}
             <button onClick={(e)=> notify(e)}>Submit</button>
           </form>
-        // </SnackbarProvider>
       );    
 }

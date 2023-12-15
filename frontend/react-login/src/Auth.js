@@ -1,5 +1,5 @@
 import axios from "axios"
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { useNavigate } from "react-router-dom";
 
 export default function () {
@@ -45,9 +45,9 @@ export default function () {
                 window.localStorage.setItem("token", token);
                 window.localStorage.setItem("roles", response.data.roles);
                 { token && (port === 8001 ? navigate("/MWRdashboard") : navigate("/dashboard")) }
-          }).catch(err => console.log(err))
+          })
         } catch (error) {
-          console.log(error)
+          return (error)
         }
   }
 

@@ -14,7 +14,6 @@ const deleteProduct = async(id) => {
             config
           );
           if(removedProduct) {removedProduct.remove()}
-        //   else console.log("no element")
         } catch (error) {
           console.error("Error fetching data:", error);
         }    
@@ -92,7 +91,6 @@ export const MWRCard = (props) => {
                     }
                 </li>
             </ul>
-            {/* } */}
         </div>
     );
   };

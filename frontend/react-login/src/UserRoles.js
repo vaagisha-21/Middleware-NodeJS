@@ -11,7 +11,6 @@ const notify = (e, msg, variant) => {
     e.preventDefault()
     enqueueSnackbar(msg,  {
       variant: variant, action: action})
-    // window.location.reload()
   }
 
 
@@ -27,7 +26,6 @@ const updateUserDetails = async (e, id, roles) => {
         )
         notify(e,"Updated User Role Successfully", "success")
     } catch (error) {
-        console.error("Error fetching data:", error);
         notify(e, "Error updating role", "danger")
     }
 }
@@ -37,17 +35,15 @@ const deleteUser = async(e, id) => {
         try {
           const token = window.localStorage.getItem("token");
           const config = { headers: { Authorization: `Bearer ${token}` } };
-        //   const response = await axios.delete(
-        //     `http://localhost:8001/api/users/${id}`,
-        //     config
-        //   );
+          const response = await axios.delete(
+            `http://localhost:8001/api/users/${id}`,
+            config
+          );
           if(removedProduct) {
             removedProduct.remove();
             notify(e, "User Deleted Successfully", "success")
            }
-        //   else console.log("no element")
         } catch (error) {
-          console.error("Error fetching data:", error);
           notify(e, "Error deleting user", "danger")
         }    
   }
@@ -66,7 +62,8 @@ export const UserRoles = () => {
                 const response = await axios.get(`http://localhost:8001/api/users/usersList`, config);  
                 setUsersList(response.data)     
             } catch (error) {
-                console.error("Error fetching data:", error);
+                // console.error("Error fetching data:", error);
+                return error
             } 
         };   
         getUsers();
@@ -94,10 +91,6 @@ export const UserRoles = () => {
                         </div>
                         <div className="d-flex justify-content-between p-2">
                             <div class="dropdown">
-                            {/* <SnackbarProvider anchorOrigin={{
-                              vertical: 'top',
-                              horizontal: 'center'}}
-                            /> */}
                                 <button class="btn btn-secondary dropdown-toggle p-1" style={{fontSize: "0.9rem"}} type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                     Manage roles
                                 </button>
@@ -105,9 +98,7 @@ export const UserRoles = () => {
                                 { rolesUsed.map( role => 
                                     <li>
                                         <button class="dropdown-item" value={role} type="submit"
-                                                onClick={(e)=> {updateUserDetails(e, user._id, role);
-                                                            // window.location.reload();
-                                                }}>
+                                                onClick={(e)=> {updateUserDetails(e, user._id, role);}}>
                                             {role}
                                         </button>
                                     </li>
