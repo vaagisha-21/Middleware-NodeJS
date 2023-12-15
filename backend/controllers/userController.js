@@ -2,7 +2,6 @@ const asyncHandler = require("express-async-handler")
 const bcrypt = require("bcrypt")
 const jwt = require("jsonwebtoken")
 const User = require("../models/userModel")
-const Product = require("../models/productModel")
 
 const registerUser = asyncHandler( async (req, res) => {
     const { username, email, password, roles } = req.body
@@ -77,4 +76,34 @@ const currentUser = asyncHandler( async (req, res) => {
     res.status(200).json(req.user)
 })
 
-module.exports = { registerUser, loginUser, currentUser }
+const getUsersList = asyncHandler( async (req,res) => {
+    const usersList = await User.find();
+    res.status(200).json(usersList)
+})
+
+const updateUserDetails = asyncHandler( async (req,res) => {
+    const data = await User.findById(req.params.id)
+    if(!data){
+        res.status(404)
+        throw new Error("User not found")
+    }
+
+    const updatedData = await User.findByIdAndUpdate(
+        req.params.id,
+        req.body,
+        { new: true }
+    )
+    res.status(200).json(updatedData)
+})
+
+const deleteUser = asyncHandler( async (req,res) => {
+    const user = await User.findById(req.params.id)
+    if(!data){
+        res.status(404)
+        throw new Error("User not found")
+    }
+    await User.findByIdAndDelete(req.params.id);
+    res.status(200).json(user);
+})
+
+module.exports = { registerUser, loginUser, currentUser, getUsersList, updateUserDetails, deleteUser }

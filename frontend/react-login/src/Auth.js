@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 
 export default function () {
-
+  const port = 8001
   const navigate = useNavigate();
   let [authMode, setAuthMode] = useState("signin")
   let [email, setEmail] = useState("")
@@ -20,26 +20,23 @@ export default function () {
 
   const checkUserDetails = async () => {
     try {
-        console.log("details", email, password)
-        await axios.post("http://localhost:8002/api/users/login",{
+        await axios.post(`http://localhost:${port}/api/users/login`,{
             "email": email,
             "password": password
         }).then((response) => {
-          const token = response?.data?.accessToken
+            const token = response?.data?.accessToken
             window.localStorage.setItem("token", token);
             window.localStorage.setItem("roles", response.data.roles);
-            { token && navigate("/dashboard") }
+            { token && navigate("/MWRdashboard")  }
         })
     } catch (error) {
-        console.log("error")
         setError(error.response.data)
     }
   }
 
   const addUserDetails = async () => {
     try {
-          console.log("details",username, email,password)
-          await axios.post(`http://localhost:8002/api/users/register`,{
+          await axios.post(`http://localhost:${port}/api/users/register`,{
               "username": username,
               "email": email,
               "password": password
@@ -47,7 +44,7 @@ export default function () {
                 const token = response.data.access_token
                 window.localStorage.setItem("token", token);
                 window.localStorage.setItem("roles", response.data.roles);
-                { token && navigate("/dashboard") }
+                { token && (port === 8001 ? navigate("/MWRdashboard") : navigate("/dashboard")) }
           }).catch(err => console.log(err))
         } catch (error) {
           console.log(error)

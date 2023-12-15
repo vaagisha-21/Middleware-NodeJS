@@ -9,8 +9,6 @@ const verifyRoles = (...assumedRoles) => {
 
         const rolesArray = [...assumedRoles]
         const reqRoles = req.user.roles
-        
-        console.log("yyyy", rolesArray, reqRoles)
         const result = reqRoles.map(role => rolesArray.includes(role)).find(val => val === true);
         
         if(!result) {
